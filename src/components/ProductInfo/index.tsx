@@ -1,11 +1,59 @@
 import './index.css';
-import { Grid, Paper, Typography } from '@material-ui/core';
+import Product from '../../types/Product';
+import {
+  Grid,
+  Paper,
+  Typography,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+} from '@material-ui/core';
+
+interface ProductInfoProps {
+  product: Product;
+}
 
 /**
- * Product Info component
- * @returns JSX for displaying the Product's properties
+ * Product info elements
+ * @returns ProductInfo UI elements
  */
-const ProductInfo = () => {
+const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
+  let listPrice = 0.0;
+  if (
+    product !== undefined &&
+    product.childSkus !== undefined &&
+    product.childSkus[0] !== undefined
+  ) {
+    listPrice = product.childSkus[0].listPrice;
+  }
+
+  let salePrice = 0.0;
+  if (
+    product !== undefined &&
+    product.childSkus !== undefined &&
+    product.childSkus[0] !== undefined
+  ) {
+    salePrice = product.childSkus[0].salePrice;
+  }
+
+  let colors: any[] = [];
+  let sizes: any[] = [];
+
+  let selectedColor = '';
+  let selectedSize = '';
+  if (product !== undefined && product.childSkus !== undefined) {
+    selectedColor = product.childSkus[0].color;
+    product.childSkus.forEach((sku) => {
+      colors.push(<MenuItem value={sku.color}>{sku.color}</MenuItem>);
+    });
+
+    selectedSize = product.childSkus[0].size;
+    product.childSkus.forEach((sku) => {
+      sizes.push(<MenuItem value={sku.size}>{sku.size}</MenuItem>);
+    });
+  }
+
   return (
     <div className="productInfo">
       <Grid container className="productGrid" spacing={2}>
@@ -13,42 +61,80 @@ const ProductInfo = () => {
           <Paper className="largeImage">
             <img
               src="https://dummyimage.com/500x500/000/0011ff"
-              alt="Levi's 501 Original Fit Jeans Jeans para Hombre"
+              alt={product.name}
             />
           </Paper>
         </Grid>
+
         <Grid item lg={8} container>
           <Grid item lg={12}>
             <Typography className="productName" variant="h1">
-              Levi's 501 Original Fit Jeans Jeans para Hombre
+              {product.name}
             </Typography>
           </Grid>
           <Grid item lg={12}>
-            <Typography>
-              100% algodón, Cierre de Cremallera, Lavar a máquina, Jeans corte
-              ajustado, Pierna ajustada, Stretch especial que te brinda mayor
-              movilidad
-            </Typography>
-          </Grid>
-          <Grid container item lg={4} direction="row">
-            <Typography className="productColor">Color</Typography>
-            <Typography>Dark Stonewash</Typography>
-          </Grid>
-          <Grid container item lg={4} direction="row">
-            <Typography className="productSize">Talla</Typography>
-            <Typography>29W X 32L</Typography>
-          </Grid>
-          <Grid container item lg={4} direction="row">
-            <Typography className="productQty">Cantidad disponible</Typography>
-            <Typography>200</Typography>
+            <Typography>{product.description}</Typography>
           </Grid>
           <Grid item lg={2}>
-            <Typography className="dollars crossedout">1027.24</Typography>
+            <Typography className="dollars crossedout">{listPrice}</Typography>
           </Grid>
-          <Grid container item lg={2} direction="row">
-            <Typography>Oferta!</Typography>
-            <Typography className="dollars">706.93</Typography>
+          <Grid item lg={2}>
+            <Typography className="dollars">{salePrice}</Typography>
           </Grid>
+          <Grid item lg={8} />
+          <Grid item lg={2}>
+            <InputLabel className="productLabel" id="color-label">
+              Color
+            </InputLabel>
+            <Select
+              labelId="color-label"
+              id="color-select"
+              label="Color"
+              value={selectedColor}
+            >
+              {colors}
+            </Select>
+          </Grid>
+          <Grid item lg={2}>
+            <InputLabel className="productLabel" id="size-label">
+              Size
+            </InputLabel>
+            <Select
+              labelId="size-label"
+              id="size-select"
+              label="Size"
+              value={selectedSize}
+            >
+              {sizes}
+            </Select>
+          </Grid>
+          <Grid item lg={8} />
+          <Grid item lg={2}>
+            <InputLabel className="productLabel" id="quantity-label">
+              Quantity
+            </InputLabel>
+            <Select
+              labelId="quantity-label"
+              id="quantity-select"
+              label="Quantity"
+              value={1}
+            >
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item lg={10} />
+
+          <Grid item lg={4}>
+            <Button className="cartButton" variant="contained">
+              Add to Cart
+            </Button>
+          </Grid>
+
+          <Grid item lg={12} />
         </Grid>
       </Grid>
     </div>
