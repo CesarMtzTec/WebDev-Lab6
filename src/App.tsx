@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import ProductDetail from './containers/ProductDetail';
+import ProductList from './containers/ProductList';
 import NavBar from './components/NavBar';
 import { CssBaseline } from '@material-ui/core';
 
@@ -9,7 +9,7 @@ function App() {
     <React.Fragment>
       <CssBaseline />
       <NavBar />
-      <ProductDetail />
+      <ProductList />
     </React.Fragment>
   );
 }
